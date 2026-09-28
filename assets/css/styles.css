@@ -362,8 +362,7 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
     0 1px 2px rgba(15,39,64,.06),
     0 8px 24px rgba(15,39,64,.12),
     0 24px 48px rgba(15,39,64,.14);
-  display: flex;
-  flex-direction: column;
+  position: relative;
 }
 .hero-carousel-image-link,
 .hero-carousel-caption-link {
@@ -377,11 +376,17 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   inset: 0;
   z-index: 1;
 }
+.hero-carousel-caption-link {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.hero-carousel-caption-link figcaption { pointer-events: auto; }
 .hero-carousel-stage {
   position: relative;
   aspect-ratio: 4 / 3;
-  background:
-    radial-gradient(120% 80% at 50% 45%, #ffffff 0%, #f2f5f8 55%, #dbe3ec 100%);
+  background: #ffffff;
   overflow: hidden;
   isolation: isolate;
 }
@@ -391,6 +396,7 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
 @media (min-width: 900px) {
   .hero-carousel-stage { aspect-ratio: 16 / 11; }
 }
+.hero-carousel-spot { display: none; }
 .hero-carousel-spot {
   position: absolute;
   left: 50%; top: 62%;
@@ -407,26 +413,20 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 1rem 3.5rem 1.5rem;
+  padding: 0;
   opacity: 0;
   transition: opacity .55s ease-in-out, transform 6s ease-out;
   pointer-events: none;
   z-index: 1;
   transform: scale(1);
-  filter: drop-shadow(0 14px 22px rgba(15,39,64,.2));
 }
 .hero-carousel-img.is-active {
   opacity: 1;
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 .hero-carousel-image-link:hover .hero-carousel-img.is-active,
-.hero-carousel-image-link:focus-visible .hero-carousel-img.is-active,
-.hero-carousel-caption-link:hover ~ .hero-carousel-stage .hero-carousel-img.is-active,
-.hero-carousel-caption-link:focus-visible ~ .hero-carousel-stage .hero-carousel-img.is-active {
-  transform: scale(1.06);
-}
-@media (min-width: 640px) {
-  .hero-carousel-img { padding: 1.25rem 4rem 1.75rem; }
+.hero-carousel-image-link:focus-visible .hero-carousel-img.is-active {
+  transform: scale(1.04);
 }
 
 /* Prev / Next arrow controls */
@@ -512,13 +512,19 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
 .hero-carousel-dots button:hover { background: rgba(255,255,255,.75); }
 .hero-carousel figcaption {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: .75rem;
-  padding: .9rem 1.1rem;
-  background: linear-gradient(180deg, #0f2740 0%, #0a1b2e 100%);
+  padding: 3rem 1.1rem 1rem;
+  background: linear-gradient(
+    0deg,
+    rgba(10,27,46,.92) 0%,
+    rgba(10,27,46,.72) 40%,
+    rgba(10,27,46,.35) 75%,
+    transparent 100%
+  );
   color: #fff;
-  border-top: 3px solid var(--color-secondary);
+  border: 0;
 }
 .hero-carousel-copy {
   display: flex;
@@ -536,6 +542,7 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(10,27,46,.6);
 }
 .hero-carousel-name {
   font-family: var(--font-heading);
@@ -546,30 +553,33 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-shadow: 0 2px 6px rgba(10,27,46,.6);
 }
 .hero-carousel-cta {
   display: inline-flex;
   align-items: center;
   gap: .35rem;
   padding: .5rem .8rem;
-  border: 1px solid rgba(255,255,255,.3);
+  border: 1px solid rgba(255,255,255,.35);
   border-radius: 999px;
   font-size: .78rem;
   font-weight: 600;
   color: #fff;
-  background: rgba(255,255,255,.06);
+  background: rgba(15,39,64,.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   transition: background .2s ease, border-color .2s ease, transform .2s ease;
   flex-shrink: 0;
 }
 .hero-carousel-cta svg { transition: transform .2s ease; }
-.hero-carousel-link:hover .hero-carousel-cta,
-.hero-carousel-link:focus-visible .hero-carousel-cta {
+.hero-carousel-caption-link:hover .hero-carousel-cta,
+.hero-carousel-caption-link:focus-visible .hero-carousel-cta {
   background: var(--color-secondary);
   border-color: var(--color-secondary);
   color: var(--color-primary-dark);
 }
-.hero-carousel-link:hover .hero-carousel-cta svg,
-.hero-carousel-link:focus-visible .hero-carousel-cta svg {
+.hero-carousel-caption-link:hover .hero-carousel-cta svg,
+.hero-carousel-caption-link:focus-visible .hero-carousel-cta svg {
   transform: translateX(3px);
 }
 .hero-carousel-progress {
