@@ -253,19 +253,51 @@ function attachHeroCarousel() {
   const imgs = root.querySelectorAll('.hero-carousel-img');
   const catEl = document.getElementById('hero-carousel-cat');
   const nameEl = document.getElementById('hero-carousel-name');
+  const idxEl = document.getElementById('hero-carousel-index');
   const linkEl = document.getElementById('hero-carousel-link');
-  if (imgs.length < 2 || !catEl || !nameEl || !linkEl) return;
+  const imgLinkEl = document.getElementById('hero-carousel-image-link');
+  const prevBtn = document.getElementById('hero-carousel-prev');
+  const nextBtn = document.getElementById('hero-carousel-next');
+  const dotsEl = document.getElementById('hero-carousel-dots');
+  if (imgs.length < 2 || !catEl || !nameEl || !linkEl || !prevBtn || !nextBtn) return;
 
   // Shuffle so returning visitors don't see the same order
   const order = products.slice().sort(() => Math.random() - 0.5);
+  const total = order.length;
   let idx = 0;
   let front = 0;
   let timer = null;
+  let hovering = false;
 
   const preload = (src) => {
     const im = new Image();
     im.decoding = 'async';
     im.src = src;
+  };
+
+  // Build dots (dense but capped so the pill stays readable)
+  const MAX_DOTS = 24;
+  const dotStep = Math.max(1, Math.ceil(total / MAX_DOTS));
+  const dotButtons = [];
+  if (dotsEl) {
+    for (let i = 0; i < total; i += dotStep) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', `Ir para item ${i + 1}`);
+      b.dataset.target = String(i);
+      b.addEventListener('click', () => go(i, true));
+      dotsEl.appendChild(b);
+      dotButtons.push({ el: b, target: i });
+    }
+  }
+
+  const updateDots = () => {
+    if (!dotButtons.length) return;
+    let winnerIndex = 0;
+    for (let i = 0; i < dotButtons.length; i++) {
+      if (idx >= dotButtons[i].target) winnerIndex = i;
+    }
+    dotButtons.forEach((d, i) => d.el.classList.toggle('is-current', i === winnerIndex));
   };
 
   const setSlide = (i, initial) => {
@@ -280,10 +312,14 @@ function attachHeroCarousel() {
       front = back;
       catEl.textContent = p.categoryLabel || 'Catálogo';
       nameEl.textContent = p.name;
-      linkEl.href = `produto.html?p=${encodeURIComponent(p.slug)}`;
+      const href = `produto.html?p=${encodeURIComponent(p.slug)}`;
+      linkEl.href = href;
+      if (imgLinkEl) imgLinkEl.href = href;
       linkEl.setAttribute('aria-label', `Ver produto: ${p.name}`);
+      if (idxEl) idxEl.textContent = `${i + 1} / ${total}`;
+      updateDots();
       // Preload next
-      const next = order[(i + 1) % order.length];
+      const next = order[(i + 1) % total];
       if (next) preload(next.image);
     };
 
@@ -296,11 +332,22 @@ function attachHeroCarousel() {
     }
   };
 
+  const go = (target, restart) => {
+    idx = ((target % total) + total) % total;
+    setSlide(idx, false);
+    if (restart) {
+      // Restart timer so the user's manual click gets a full 3s window
+      pulse();
+      start();
+    }
+  };
+
   const start = () => {
+    if (hovering || document.hidden) return;
     root.classList.add('is-running');
     if (timer) clearInterval(timer);
     timer = setInterval(() => {
-      idx = (idx + 1) % order.length;
+      idx = (idx + 1) % total;
       setSlide(idx, false);
     }, 3000);
   };
@@ -308,6 +355,45 @@ function attachHeroCarousel() {
     root.classList.remove('is-running');
     if (timer) { clearInterval(timer); timer = null; }
   };
+
+  // Force a clean restart of the CSS progress bar animation
+  const pulse = () => {
+    const bar = root.querySelector('.hero-carousel-progress > span');
+    if (!bar) return;
+    root.classList.remove('is-running');
+    // reflow
+    void bar.offsetWidth;
+    root.classList.add('is-running');
+  };
+
+  // Wire up nav buttons
+  prevBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    go(idx - 1, true);
+  });
+  nextBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    go(idx + 1, true);
+  });
+
+  // Keyboard nav when the carousel has focus within
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(idx - 1, true); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(idx + 1, true); }
+  });
+
+  // Basic swipe support for touch
+  let touchStartX = null;
+  root.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  root.addEventListener('touchend', (e) => {
+    if (touchStartX == null) return;
+    const dx = (e.changedTouches[0].clientX) - touchStartX;
+    touchStartX = null;
+    if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1), true);
+  });
 
   // Initial paint
   setSlide(0, true);
@@ -319,10 +405,12 @@ function attachHeroCarousel() {
   });
 
   // Pause on hover / focus (desktop) for accessibility
-  root.addEventListener('mouseenter', stop);
-  root.addEventListener('mouseleave', start);
-  root.addEventListener('focusin', stop);
-  root.addEventListener('focusout', start);
+  root.addEventListener('mouseenter', () => { hovering = true; stop(); });
+  root.addEventListener('mouseleave', () => { hovering = false; start(); });
+  root.addEventListener('focusin', () => { hovering = true; stop(); });
+  root.addEventListener('focusout', (e) => {
+    if (!root.contains(e.relatedTarget)) { hovering = false; start(); }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
