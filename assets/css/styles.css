@@ -415,35 +415,19 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   pointer-events: none;
 }
 .hero-carousel-slot.is-active { opacity: 1; }
-.hero-carousel-bg {
-  position: absolute;
-  inset: -8%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(30px) saturate(1.15);
-  transform: scale(1.15);
-  z-index: 0;
-  pointer-events: none;
-}
-.hero-carousel-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,.35);
-  pointer-events: none;
-}
+/* Blur-bg desligado — o whitelist so admite imagens que casam bem com o card */
+.hero-carousel-bg { display: none; }
 .hero-carousel-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 1.5rem;
+  padding: 2rem 3.5rem;
   z-index: 1;
   transform: scale(1);
   transition: transform 6s ease-out;
-  filter: drop-shadow(0 12px 24px rgba(15,39,64,.25));
+  filter: drop-shadow(0 12px 24px rgba(15,39,64,.22));
 }
 .hero-carousel-slot.is-active .hero-carousel-img {
   transform: scale(1.03);
@@ -453,7 +437,10 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   transform: scale(1.05);
 }
 @media (min-width: 640px) {
-  .hero-carousel-img { padding: 2rem; }
+  .hero-carousel-img { padding: 2.75rem 4.5rem; }
+}
+@media (min-width: 900px) {
+  .hero-carousel-img { padding: 3rem 5rem 3.5rem; }
 }
 
 /* Prev / Next arrow controls */
