@@ -363,6 +363,9 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
     0 8px 24px rgba(15,39,64,.12),
     0 24px 48px rgba(15,39,64,.14);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
 }
 .hero-carousel-image-link,
 .hero-carousel-caption-link {
@@ -377,12 +380,9 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   z-index: 1;
 }
 .hero-carousel-caption-link {
-  position: absolute;
-  inset: auto 0 0 0;
+  position: relative;
   z-index: 2;
-  pointer-events: none;
 }
-.hero-carousel-caption-link figcaption { pointer-events: auto; }
 .hero-carousel-stage {
   position: relative;
   aspect-ratio: 4 / 3;
@@ -423,24 +423,16 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 2rem 3.5rem;
+  padding: 1.25rem 3.75rem;
   z-index: 1;
-  transform: scale(1);
-  transition: transform 6s ease-out;
+  transform: none;
   filter: drop-shadow(0 12px 24px rgba(15,39,64,.22));
 }
-.hero-carousel-slot.is-active .hero-carousel-img {
-  transform: scale(1.03);
-}
-.hero-carousel-image-link:hover .hero-carousel-slot.is-active .hero-carousel-img,
-.hero-carousel-image-link:focus-visible .hero-carousel-slot.is-active .hero-carousel-img {
-  transform: scale(1.05);
-}
 @media (min-width: 640px) {
-  .hero-carousel-img { padding: 2.75rem 4.5rem; }
+  .hero-carousel-img { padding: 1.5rem 4.25rem; }
 }
 @media (min-width: 900px) {
-  .hero-carousel-img { padding: 3rem 5rem 3.5rem; }
+  .hero-carousel-img { padding: 1.75rem 4.5rem; }
 }
 
 /* Prev / Next arrow controls */
@@ -526,19 +518,14 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
 .hero-carousel-dots button:hover { background: rgba(255,255,255,.75); }
 .hero-carousel figcaption {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: .75rem;
-  padding: 3rem 1.1rem 1rem;
-  background: linear-gradient(
-    0deg,
-    rgba(10,27,46,.92) 0%,
-    rgba(10,27,46,.72) 40%,
-    rgba(10,27,46,.35) 75%,
-    transparent 100%
-  );
+  padding: 1rem 1.1rem;
+  background: linear-gradient(180deg, #0f2740 0%, #0a1b2e 100%);
   color: #fff;
   border: 0;
+  border-top: 3px solid var(--color-secondary);
 }
 .hero-carousel-copy {
   display: flex;
