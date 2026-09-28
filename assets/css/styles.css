@@ -385,16 +385,21 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
 }
 .hero-carousel-stage {
   position: relative;
-  aspect-ratio: 4 / 3;
-  background: #ffffff;
+  aspect-ratio: 5 / 4;
   overflow: hidden;
   isolation: isolate;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 42%, #ffffff 0%, #f4f7fb 45%, #dfe6ee 100%);
 }
-@media (min-width: 640px) {
-  .hero-carousel-stage { aspect-ratio: 16 / 10; }
-}
-@media (min-width: 900px) {
-  .hero-carousel-stage { aspect-ratio: 16 / 11; }
+.hero-carousel-stage::after {
+  content: "";
+  position: absolute;
+  left: 8%; right: 8%; bottom: 6%;
+  height: 3.5%;
+  background: radial-gradient(ellipse at center, rgba(15,39,64,.28) 0%, rgba(15,39,64,.08) 55%, transparent 75%);
+  filter: blur(2px);
+  z-index: 0;
+  pointer-events: none;
 }
 .hero-carousel-spot { display: none; }
 .hero-carousel-spot {
@@ -423,16 +428,16 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 1.25rem 3.75rem;
+  padding: 2rem 4rem 2.5rem;
   z-index: 1;
   transform: none;
-  filter: drop-shadow(0 12px 24px rgba(15,39,64,.22));
+  filter: drop-shadow(0 14px 22px rgba(15,39,64,.18));
 }
 @media (min-width: 640px) {
-  .hero-carousel-img { padding: 1.5rem 4.25rem; }
+  .hero-carousel-img { padding: 2.5rem 4.5rem 3rem; }
 }
 @media (min-width: 900px) {
-  .hero-carousel-img { padding: 1.75rem 4.5rem; }
+  .hero-carousel-img { padding: 3rem 5rem 3.5rem; }
 }
 
 /* Prev / Next arrow controls */

@@ -247,21 +247,20 @@ function attachScrollReveal() {
 function attachHeroCarousel() {
   const root = document.getElementById('hero-carousel');
   if (!root) return;
-  // Whitelist gerada auditando as proporcoes das fotos:
-  // apenas produtos cuja imagem preenche >=65% do card 16:11 e
-  // tem resolucao minima >=250px no menor lado — nada e cortado
-  // nem fica com faixas gigantes em volta.
+  // Whitelist rigoroso contra card 5:4:
+  // - fill >= 75% (produto ocupa >=75% do eixo restrito, minima
+  //   margem em volta que serve so como respiro visual)
+  // - min_dim >= 300px (qualidade suficiente pra render nitido)
   const HERO_ALLOW = new Set([
     "cama-hospitalar-fowler-5-mov","cama-fowler-simples","cama-hospitalar-simples",
     "berco-hospitalar","berco-hospitalar-simples","carro-leito-hospitalar",
-    "carro-leito-hospitalar-inox","carro-elevacao","colchao-hospitalar",
-    "maca-maleta","maca-hospitalar-gabinete","carro-curativo-inox",
-    "carro-curativo-epoxi","armario-vitrine-1-porta","mesa-cabeceira-aberta",
-    "escrivaninha-hospitalar-2-gavetas","mesa-semi-circular-inox",
-    "mesa-auxiliar-sem-varanda-epoxi","mesa-ginecologica","mesa-ginecologica-mdf",
-    "cadeira-rodas-simples","poltrona-reclinavel-4-mov","poltrona-reclinavel-2-mov",
-    "biombo-triplo-epoxi","escada-hospitalar-epoxi","longarina-3-assentos",
-    "longarina-2-assentos","escrivaninha-escritorio-2-gavetas"
+    "carro-leito-hospitalar-inox","carro-elevacao","maca-maleta",
+    "maca-hospitalar-gabinete","carro-curativo-inox","carro-curativo-epoxi",
+    "armario-vitrine-1-porta","mesa-cabeceira-aberta",
+    "escrivaninha-hospitalar-2-gavetas","mesa-auxiliar-sem-varanda-epoxi",
+    "mesa-ginecologica","mesa-ginecologica-mdf","poltrona-reclinavel-4-mov",
+    "poltrona-reclinavel-2-mov","escada-hospitalar-epoxi",
+    "longarina-3-assentos","escrivaninha-escritorio-2-gavetas"
   ]);
   const products = (window.HAUS_PRODUCTS || []).filter(p => p.image && HERO_ALLOW.has(p.slug));
   if (!products.length) return;
