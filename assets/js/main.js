@@ -343,7 +343,6 @@ function attachHeroCarousel() {
   };
 
   const start = () => {
-    if (hovering || document.hidden) return;
     root.classList.add('is-running');
     if (timer) clearInterval(timer);
     timer = setInterval(() => {
@@ -351,35 +350,21 @@ function attachHeroCarousel() {
       setSlide(idx, false);
     }, 3000);
   };
-  const stop = () => {
-    root.classList.remove('is-running');
-    if (timer) { clearInterval(timer); timer = null; }
-  };
 
-  // Force a clean restart of the CSS progress bar animation
-  const pulse = () => {
-    const bar = root.querySelector('.hero-carousel-progress > span');
-    if (!bar) return;
-    root.classList.remove('is-running');
-    // reflow
-    void bar.offsetWidth;
-    root.classList.add('is-running');
-  };
-
-  // Wire up nav buttons
+  // Wire up nav buttons — apenas adiantam/voltam sem parar a rotacao
   prevBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    go(idx - 1, true);
+    go(idx - 1, false);
   });
   nextBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    go(idx + 1, true);
+    go(idx + 1, false);
   });
 
-  // Keyboard nav when the carousel has focus within
+  // Keyboard nav
   root.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(idx - 1, true); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); go(idx + 1, true); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(idx - 1, false); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(idx + 1, false); }
   });
 
   // Basic swipe support for touch
@@ -392,25 +377,12 @@ function attachHeroCarousel() {
     if (touchStartX == null) return;
     const dx = (e.changedTouches[0].clientX) - touchStartX;
     touchStartX = null;
-    if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1), true);
+    if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1), false);
   });
 
-  // Initial paint
+  // Initial paint + rotacao constante (sem pausas de hover, focus ou aba oculta)
   setSlide(0, true);
   start();
-
-  // Pause when tab hidden, resume on visible
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop(); else start();
-  });
-
-  // Pause on hover / focus (desktop) for accessibility
-  root.addEventListener('mouseenter', () => { hovering = true; stop(); });
-  root.addEventListener('mouseleave', () => { hovering = false; start(); });
-  root.addEventListener('focusin', () => { hovering = true; stop(); });
-  root.addEventListener('focusout', (e) => {
-    if (!root.contains(e.relatedTarget)) { hovering = false; start(); }
-  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
