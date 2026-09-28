@@ -253,7 +253,8 @@ function attachHeroCarousel() {
   const imgs = root.querySelectorAll('.hero-carousel-img');
   const catEl = document.getElementById('hero-carousel-cat');
   const nameEl = document.getElementById('hero-carousel-name');
-  if (imgs.length < 2 || !catEl || !nameEl) return;
+  const linkEl = document.getElementById('hero-carousel-link');
+  if (imgs.length < 2 || !catEl || !nameEl || !linkEl) return;
 
   // Shuffle so returning visitors don't see the same order
   const order = products.slice().sort(() => Math.random() - 0.5);
@@ -279,6 +280,8 @@ function attachHeroCarousel() {
       front = back;
       catEl.textContent = p.categoryLabel || 'Catálogo';
       nameEl.textContent = p.name;
+      linkEl.href = `produto.html?p=${encodeURIComponent(p.slug)}`;
+      linkEl.setAttribute('aria-label', `Ver produto: ${p.name}`);
       // Preload next
       const next = order[(i + 1) % order.length];
       if (next) preload(next.image);
