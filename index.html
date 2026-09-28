@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=17">
+<link rel="stylesheet" href="assets/css/styles.css?v=18">
 <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/img/favicon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
@@ -37,10 +37,15 @@
     <div class="hero-visual">
       <figure class="hero-storefront hero-carousel" id="hero-carousel" aria-roledescription="carrossel" aria-label="Vitrine rotativa de produtos Hausmedical">
         <div class="hero-carousel-stage">
-          <div class="hero-carousel-spot" aria-hidden="true"></div>
           <a class="hero-carousel-image-link" id="hero-carousel-image-link" href="produtos.html" tabindex="-1" aria-hidden="true">
-            <img class="hero-carousel-img is-active" alt="" width="1280" height="720" fetchpriority="high" decoding="async">
-            <img class="hero-carousel-img" alt="" width="1280" height="720" decoding="async">
+            <div class="hero-carousel-slot is-active">
+              <div class="hero-carousel-bg" aria-hidden="true"></div>
+              <img class="hero-carousel-img" alt="" width="1280" height="720" fetchpriority="high" decoding="async">
+            </div>
+            <div class="hero-carousel-slot">
+              <div class="hero-carousel-bg" aria-hidden="true"></div>
+              <img class="hero-carousel-img" alt="" width="1280" height="720" decoding="async">
+            </div>
           </a>
           <button type="button" class="hero-carousel-nav hero-carousel-prev" id="hero-carousel-prev" aria-label="Produto anterior">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
@@ -192,6 +197,6 @@
 
 <script src="assets/js/products.js?v=8"></script>
 <script src="assets/js/partials.js?v=7"></script>
-<script src="assets/js/main.js?v=13"></script>
+<script src="assets/js/main.js?v=14"></script>
 </body>
 </html>

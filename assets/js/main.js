@@ -250,7 +250,9 @@ function attachHeroCarousel() {
   const products = (window.HAUS_PRODUCTS || []).filter(p => p.image);
   if (!products.length) return;
 
+  const slots = root.querySelectorAll('.hero-carousel-slot');
   const imgs = root.querySelectorAll('.hero-carousel-img');
+  const bgs = root.querySelectorAll('.hero-carousel-bg');
   const catEl = document.getElementById('hero-carousel-cat');
   const nameEl = document.getElementById('hero-carousel-name');
   const idxEl = document.getElementById('hero-carousel-index');
@@ -305,10 +307,11 @@ function attachHeroCarousel() {
     const back = 1 - front;
     imgs[back].src = p.image;
     imgs[back].alt = p.name;
+    if (bgs[back]) bgs[back].style.backgroundImage = `url("${p.image}")`;
 
     const swap = () => {
-      imgs[front].classList.remove('is-active');
-      imgs[back].classList.add('is-active');
+      slots[front].classList.remove('is-active');
+      slots[back].classList.add('is-active');
       front = back;
       catEl.textContent = p.categoryLabel || 'Catálogo';
       nameEl.textContent = p.name;
