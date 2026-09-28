@@ -244,6 +244,84 @@ function attachScrollReveal() {
   }, 1200);
 }
 
+function attachHeroCarousel() {
+  const root = document.getElementById('hero-carousel');
+  if (!root) return;
+  const products = (window.HAUS_PRODUCTS || []).filter(p => p.image);
+  if (!products.length) return;
+
+  const imgs = root.querySelectorAll('.hero-carousel-img');
+  const catEl = document.getElementById('hero-carousel-cat');
+  const nameEl = document.getElementById('hero-carousel-name');
+  if (imgs.length < 2 || !catEl || !nameEl) return;
+
+  // Shuffle so returning visitors don't see the same order
+  const order = products.slice().sort(() => Math.random() - 0.5);
+  let idx = 0;
+  let front = 0;
+  let timer = null;
+
+  const preload = (src) => {
+    const im = new Image();
+    im.decoding = 'async';
+    im.src = src;
+  };
+
+  const setSlide = (i, initial) => {
+    const p = order[i];
+    const back = 1 - front;
+    imgs[back].src = p.image;
+    imgs[back].alt = p.name;
+
+    const swap = () => {
+      imgs[front].classList.remove('is-active');
+      imgs[back].classList.add('is-active');
+      front = back;
+      catEl.textContent = p.categoryLabel || 'Catálogo';
+      nameEl.textContent = p.name;
+      // Preload next
+      const next = order[(i + 1) % order.length];
+      if (next) preload(next.image);
+    };
+
+    if (initial) {
+      swap();
+    } else if (imgs[back].complete) {
+      swap();
+    } else {
+      imgs[back].addEventListener('load', swap, { once: true });
+    }
+  };
+
+  const start = () => {
+    root.classList.add('is-running');
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+      idx = (idx + 1) % order.length;
+      setSlide(idx, false);
+    }, 3000);
+  };
+  const stop = () => {
+    root.classList.remove('is-running');
+    if (timer) { clearInterval(timer); timer = null; }
+  };
+
+  // Initial paint
+  setSlide(0, true);
+  start();
+
+  // Pause when tab hidden, resume on visible
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  // Pause on hover / focus (desktop) for accessibility
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin', stop);
+  root.addEventListener('focusout', start);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   attachAccordion();
   attachMenu();
@@ -252,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProductDetail();
   renderCategoryGrid('[data-render="categories"]', 10);
   renderFeaturedProducts('[data-render="featured"]', 6);
+  attachHeroCarousel();
   requestAnimationFrame(attachScrollReveal);
 
   ['change','input'].forEach(ev => {

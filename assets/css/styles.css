@@ -334,6 +334,7 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   margin: 0;
   position: relative;
   background: var(--color-ink);
+  overflow: hidden;
 }
 .hero-storefront img {
   width: 100%;
@@ -351,6 +352,73 @@ a, button, [role="button"], .cat-card, .seg-card, .product-card { cursor: pointe
   font-size: .78rem;
   font-weight: 600;
   letter-spacing: 0;
+}
+
+/* Hero carousel — rotative product showcase */
+.hero-carousel-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #fff;
+  overflow: hidden;
+}
+.hero-carousel-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2rem 3rem 3rem;
+  opacity: 0;
+  transition: opacity .55s ease-in-out;
+  pointer-events: none;
+}
+.hero-carousel-img.is-active { opacity: 1; }
+.hero-carousel figcaption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .15rem;
+  padding: 1rem 1.1rem .85rem;
+}
+.hero-carousel-cat {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+}
+.hero-carousel-name {
+  font-size: .95rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.hero-carousel-progress {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 2px;
+  background: rgba(255,255,255,.15);
+  z-index: 2;
+  pointer-events: none;
+}
+.hero-carousel-progress > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--color-secondary);
+  transform-origin: left center;
+  transition: none;
+}
+.hero-carousel.is-running .hero-carousel-progress > span {
+  animation: hero-carousel-progress 3s linear infinite;
+}
+@keyframes hero-carousel-progress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-carousel-img { transition: none; }
+  .hero-carousel.is-running .hero-carousel-progress > span { animation: none; width: 0; }
 }
 .hero-plaque {
   border-top: 2px solid var(--color-ink);

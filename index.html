@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=13">
+<link rel="stylesheet" href="assets/css/styles.css?v=14">
 <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/img/favicon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
@@ -35,9 +35,16 @@
       </div>
     </div>
     <div class="hero-visual">
-      <figure class="hero-storefront">
-        <img src="assets/img/loja.jpg" alt="Fachada da Hausmedical na Avenida Tefé, Japiim, Manaus" width="1280" height="714" fetchpriority="high" decoding="async">
-        <figcaption>Nossa loja · Avenida Tefé, 31 · Japiim, Manaus/AM</figcaption>
+      <figure class="hero-storefront hero-carousel" id="hero-carousel" aria-label="Vitrine rotativa de produtos Hausmedical" aria-live="off">
+        <div class="hero-carousel-stage">
+          <img class="hero-carousel-img is-active" alt="" width="1280" height="720" fetchpriority="high" decoding="async">
+          <img class="hero-carousel-img" alt="" width="1280" height="720" decoding="async">
+        </div>
+        <figcaption>
+          <span class="hero-carousel-cat" id="hero-carousel-cat">Catálogo</span>
+          <span class="hero-carousel-name" id="hero-carousel-name">Carregando produtos…</span>
+        </figcaption>
+        <div class="hero-carousel-progress" aria-hidden="true"><span></span></div>
       </figure>
       <aside class="hero-plaque" aria-label="Compromissos comerciais">
         <dl>
@@ -166,7 +173,7 @@
 <footer class="site-footer" id="site-footer"></footer>
 
 <script src="assets/js/products.js?v=8"></script>
-<script src="assets/js/partials.js?v=6"></script>
-<script src="assets/js/main.js?v=9"></script>
+<script src="assets/js/partials.js?v=7"></script>
+<script src="assets/js/main.js?v=10"></script>
 </body>
 </html>
